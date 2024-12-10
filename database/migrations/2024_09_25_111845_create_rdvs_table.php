@@ -12,8 +12,22 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('rdvs', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->id(); // Clé primaire
+            $table->dateTime('DateRdv'); // Date et heure du rendez-vous
+            $table->unsignedBigInteger('NoCom'); // Clé étrangère vers commercials.id
+            $table->unsignedBigInteger('NoClient'); // Clé étrangère vers clients.id
+            $table->timestamps(); // created_at et updated_at
+    
+            // Définir les clés étrangères
+            $table->foreign('NoCom')
+                  ->references('id')
+                  ->on('commercials')
+                  ->onDelete('cascade'); // Suppression en cascade si un commercial est supprimé
+    
+            $table->foreign('NoClient')
+                  ->references('id')
+                  ->on('clients')
+                  ->onDelete('cascade'); // Suppression en cascade si un client est supprimé
         });
     }
 
