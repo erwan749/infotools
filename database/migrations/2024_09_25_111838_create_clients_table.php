@@ -12,16 +12,19 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('clients', function (Blueprint $table) {
-            $table->id(); // Auto-incrementing primary key 'id'
-            $table->string('CPClient', 50); // 'CPClient' VARCHAR(50)
-            $table->string('VilleClient', 50); // 'VilleClient' VARCHAR(50)
-            $table->string('AdresseClient', 100); // 'AdresseClient' VARCHAR(100)
-            $table->Integer('idProspects'); // Foreign key for prospects table
+            $table->id(); // Clé primaire auto-incrémentée
+            $table->string('CPClient', 50); // Code postal
+            $table->string('VilleClient', 50); // Ville
+            $table->string('AdresseClient', 100); // Adresse
+            $table->unsignedBigInteger('idProspects'); // Clé étrangère vers prospects.id
 
-            // Add foreign key constraint
-            $table->foreign('idProspects')->references('id')->on('prospects')->onDelete('cascade');
+            // Définition de la clé étrangère
+            $table->foreign('idProspects')
+                  ->references('id')
+                  ->on('prospects')
+                  ->onDelete('cascade'); // Suppression en cascade
 
-            $table->timestamps(); // 'created_at' and 'updated_at' timestamps
+            $table->timestamps(); // created_at et updated_at
         });
     }
 

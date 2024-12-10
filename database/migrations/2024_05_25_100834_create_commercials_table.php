@@ -12,19 +12,19 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('commercials', function (Blueprint $table) {
-            $table->id();
-            $table->string('cpCom', 5); //
-            $table->string('villeCom', 50); //
-            $table->string('rueCom', 50); //
-            $table->string('telCom', 50); //
-            $table->Integer('idUser', 20); //
-            $table->timestamps();
-            
-            $table->foreign('idUser')
-            ->references('id')
-            ->on('users')
-            ->onDelete('cascade'); // Suppression en cascade
+            $table->id(); // Clé primaire auto-incrémentée
+            $table->string('cpCom', 5); // Code postal
+            $table->string('villeCom', 50); // Ville
+            $table->string('rueCom', 50); // Rue
+            $table->string('telCom', 50); // Téléphone
+            $table->unsignedBigInteger('idUser'); // Clé étrangère vers users.id
+            $table->timestamps(); // Colonnes created_at et updated_at
 
+            // Déclaration de la clé étrangère
+            $table->foreign('idUser')
+                  ->references('id')
+                  ->on('users')
+                  ->onDelete('cascade'); // Suppression en cascade
         });
     }
 

@@ -12,18 +12,18 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('rdvs', function (Blueprint $table) {
-            $table->id(); // Clé primaire
+            $table->id(); // Clé primaire auto-incrémentée
             $table->dateTime('DateRdv'); // Date et heure du rendez-vous
-            $table->Integer('NoCom'); // Clé étrangère vers commercials.id
-            $table->Integer('NoClient'); // Clé étrangère vers clients.id
-            $table->timestamps(); // created_at et updated_at
-    
+            $table->unsignedBigInteger('NoCom'); // Clé étrangère vers commercials.id
+            $table->unsignedBigInteger('NoClient'); // Clé étrangère vers clients.id
+            $table->timestamps(); // Colonnes created_at et updated_at
+
             // Définir les clés étrangères
             $table->foreign('NoCom')
                   ->references('id')
                   ->on('commercials')
                   ->onDelete('cascade'); // Suppression en cascade si un commercial est supprimé
-    
+
             $table->foreign('NoClient')
                   ->references('id')
                   ->on('clients')

@@ -12,11 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('factures', function (Blueprint $table) {
-            $table->id();
-            $table->dateTime('DateFact'); 
-            $table->Integer('idClient'); // Clé étrangère vers clients.id
-            $table->timestamps();
+            $table->id(); // Clé primaire auto-incrémentée
+            $table->dateTime('DateFact'); // Date et heure de la facture
+            $table->unsignedBigInteger('idClient'); // Clé étrangère vers clients.id
+            $table->timestamps(); // Colonnes created_at et updated_at
 
+            // Définir la clé étrangère
             $table->foreign('idClient')
                   ->references('id')
                   ->on('clients')
