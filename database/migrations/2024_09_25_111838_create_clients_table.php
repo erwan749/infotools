@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('CPClient', 50); // 'CPClient' VARCHAR(50)
             $table->string('VilleClient', 50); // 'VilleClient' VARCHAR(50)
             $table->string('AdresseClient', 100); // 'AdresseClient' VARCHAR(100)
-            $table->unsignedBigInteger('idProspects'); // Foreign key for prospects table
+            $table->Integer('idProspects'); // Foreign key for prospects table
 
             // Add foreign key constraint
             $table->foreign('idProspects')->references('id')->on('prospects')->onDelete('cascade');

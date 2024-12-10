@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('factures', function (Blueprint $table) {
             $table->id();
             $table->dateTime('DateFact'); 
-            $table->unsignedBigInteger('idClient'); // Clé étrangère vers clients.id
+            $table->Integer('idClient'); // Clé étrangère vers clients.id
             $table->timestamps();
 
             $table->foreign('idClient')

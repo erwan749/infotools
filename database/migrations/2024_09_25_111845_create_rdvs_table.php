@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('rdvs', function (Blueprint $table) {
             $table->id(); // Clé primaire
             $table->dateTime('DateRdv'); // Date et heure du rendez-vous
-            $table->unsignedBigInteger('NoCom'); // Clé étrangère vers commercials.id
-            $table->unsignedBigInteger('NoClient'); // Clé étrangère vers clients.id
+            $table->Integer('NoCom'); // Clé étrangère vers commercials.id
+            $table->Integer('NoClient'); // Clé étrangère vers clients.id
             $table->timestamps(); // created_at et updated_at
     
             // Définir les clés étrangères

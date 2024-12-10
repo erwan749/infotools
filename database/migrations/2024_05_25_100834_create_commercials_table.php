@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('villeCom', 50); //
             $table->string('rueCom', 50); //
             $table->string('telCom', 50); //
-            $table->bigInteger('idUser', 20); //
+            $table->Integer('idUser', 20); //
             $table->timestamps();
             
             $table->foreign('idUser')
