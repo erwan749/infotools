@@ -38,5 +38,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('produits', ProduitApiController::class);
     Route::apiResource('rdvs', RdvApiController::class);
     Route::apiResource('commerciaux', CommercialApiController::class);
-
 });
+Route::post('login', [CommercialApiController::class, 'login'])->name('commerciaux.login');

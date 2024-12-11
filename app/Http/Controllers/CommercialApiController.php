@@ -24,35 +24,7 @@ class CommercialApiController extends Controller
      */
     public function store(Request $request)
     {
-        if(!auth()->user()->tokenCan('read')){
-            abort(401,'non autorisé');
-        }
-
-        $user = User::where('email',$request->email)->first();
-
-        if(is_null($user)){
-            return response()->json([
-                "success" => false,
-                "message" => "L'utilisateur n'existe pas."
-            ], 404);
-        }
-
-        if (Hash::check($request->psw, $user->password)) {
-            return response()->json([
-                "success" => true,
-                "data" => [
-                    "name"=>$user->name,
-                ]
-
-            ]);
-        }
-        else{
-            return response()->json([
-                "success" => false,
-                "message"=>"mauvais mots de passe"
-
-            ]);
-        }
+        
     }
 
     /**
@@ -77,5 +49,31 @@ class CommercialApiController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+    public function login(Request $request)
+    {
+    
+        $user = User::where('email', $request->email)->first();
+
+        if (is_null($user)) {
+            return response()->json([
+                "success" => false,
+                "message" => "L'utilisateur n'existe pas."
+            ], 404);
+        }
+
+        if (Hash::check($request->psw, $user->password)) {
+            return response()->json([
+                "success" => true,
+                "data" => [
+                    "name" => $user->name,
+                ]
+            ]);
+        } else {
+            return response()->json([
+                "success" => false,
+                "message" => "Mauvais mot de passe"
+            ], 401);
+        }
     }
 }
