@@ -5,6 +5,8 @@ use App\Http\Controllers\ProduitController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\FactureController;
 use App\Http\Controllers\ContenirController;
+use App\Http\Controllers\RdvController;
+
 
 
 /*
@@ -32,6 +34,7 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
     Route::resource('clients',ClientController::class);
+    Route::resource('rdv',RdvController::class);
     Route::resource('produits',ProduitController::class);
     Route::resource('factures',FactureController::class);
     Route::get('/contenir/create/{facture_id}', [ContenirController::class, 'create'])->name('contenir.create');
