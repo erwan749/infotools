@@ -41,31 +41,32 @@ class ContenirController extends Controller
 
 
     public function store(Request $request)
-{
-    // Validation des données
-// Check if the product already exists in the invoice
-$contenir = Contenir::where('idFact', $request->idFact)
-                    ->where('idProd', $request->idProd)
-                    ->first();
+    {
+            // Validation des données
+        // Check if the product already exists in the invoice
+        $contenir = Contenir::where('idFact', $request->idFact)
+                            ->where('idProd', $request->idProd)
+                            ->first();
 
-if ($contenir) {
-    // Update the quantity instead of creating a new record
-    $contenir->Qte += $request->Qte;
-    $contenir->save();
+        if ($contenir) {
+            // Update the quantity instead of creating a new record
+            $contenir->Qte += $request->Qte;
+            $contenir->save();
 
-    return redirect()->route('factures.show', $request->idFact)
-                     ->with('success', 'Quantité mise à jour pour ce produit.');
-} else {
-    // Create a new record
-    Contenir::create([
-        'idFact' => $request->idFact,
-        'idProd' => $request->idProd,
-        'Qte' => $request->Qte,
-    ]);
+            return redirect()->route('factures.show', $request->idFact)
+                            ->with('success', 'Quantité mise à jour pour ce produit.');
+        } else {
+            // Create a new record
+            Contenir::create([
+                'idFact' => $request->idFact,
+                'idProd' => $request->idProd,
+                'Qte' => $request->Qte,
+            ]);
 
-    return redirect()->route('factures.show', $request->idFact)
-                     ->with('success', 'Produit ajouté à la facture.');
-}}
+            return redirect()->route('factures.show', $request->idFact)
+                            ->with('success', 'Produit ajouté à la facture.');
+        }
+    }
 
         
     /**
@@ -79,18 +80,59 @@ if ($contenir) {
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Contenir $contenir)
+    public function edit($idFact, $idProd)
     {
-        //
+        // Récupérer le contenu de la facture avec le produit et la quantité
+        $contenir = Contenir::where('idFact', $idFact)
+                            ->where('idProd', $idProd)
+                            ->first();
+        $produits = Produit::all();
+        // Vérifier si le contenu existe
+        if (!$contenir) {
+            return redirect()->route('factures.index')->with('error', 'Produit non trouvé dans cette facture');
+        }
+    
+        // Passer le contenu et l'idFact à la vue
+        return view('factures.contenirs.edit', compact('contenir', 'idFact','produits'));
     }
+    
+
+    
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateContenirRequest $request, Contenir $contenir)
+    /**
+ * Update the specified resource in storage.
+ */
+    public function update(UpdateContenirRequest $request, $idFact, $idProd)
     {
-        //
+        // Récupérer le contenu à mettre à jour
+        $contenir = Contenir::where('idFact', $idFact)
+                            ->where('idProd', $idProd)
+                            ->first();
+
+        // Vérifier si le contenu existe
+        if (!$contenir) {
+            return redirect()->route('factures.show', $idFact)->with('error', 'Produit non trouvé dans cette facture');
+        }
+
+        // Validation des nouvelles données
+        $request->validate([
+            'Qte' => 'required|integer|min:1',
+            'idProd' => 'required|exists:produits,id', // Assurer que le produit existe
+        ]);
+
+        // Mettre à jour la quantité et le produit
+        $contenir->Qte = $request->Qte;
+        $contenir->idProd = $request->idProd;  // Mise à jour du produit
+        $contenir->save();
+
+        // Redirection avec un message de succès
+        return redirect()->route('factures.show', $idFact)
+                        ->with('success', 'Produit et quantité mis à jour dans la facture.');
     }
+
 
     /**
      * Remove the specified resource from storage.
