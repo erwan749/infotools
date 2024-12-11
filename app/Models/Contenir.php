@@ -9,16 +9,17 @@ class Contenir extends Model
 {
     use HasFactory;
 
-    protected $table = 'contenirs'; // Le nom correct de la table
-    protected $fillable = [
-        'idFact', 'idProd', 'Qte'
-    ];
+    protected $primaryKey = ['idFact', 'idProd'];
 
-    // Remove composite primary key definition
-    // public $primaryKey = ['idFact', 'idProd']; // This line is unnecessary
+    // Tell Eloquent that the key is not auto-incrementing
+    public $incrementing = false;
 
-    // Disable incrementing for non-auto-increment fields
-    public $incrementing = false;  // Leave this as it is
+    // Define the type of key, assuming both 'idFact' and 'idProd' are integers
+    protected $keyType = 'int'; // or 'string' depending on your setup
+
+    // Optionally, you can define which fields are fillable (you might want to adjust this)
+    protected $fillable = ['Qte', 'idFact', 'idProd'];
+
 
     // Relationships
     public function produit()
