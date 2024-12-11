@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Rdv;
-use App\Http\Requests\StoreRdvRequest;
-use App\Http\Requests\UpdateRdvRequest;
+use App\Http\Requests\Request;
 
 class RdvController extends Controller
 {
@@ -27,7 +26,7 @@ class RdvController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreRdvRequest $request)
+    public function store(Request $request)
     {
         //
     }
@@ -51,7 +50,7 @@ class RdvController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateRdvRequest $request, Rdv $rdv)
+    public function update(Request $request, Rdv $rdv)
     {
         //
     }
