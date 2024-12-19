@@ -77,7 +77,7 @@
 <div class="flex-center position-ref ">
     
     <div class="top-right links">
-    <a href="http://infotools.test/dashboard">Home</a>
+    <a href="/dashboard">Home</a>
     </div>
 
     <br \><br \>

@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Gestion des factures</title>
+    <title>Gestion des rendez-vous</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/css/bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{asset('css/app.css')}}">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/css/bootstrap-datepicker.css" rel="stylesheet">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
@@ -18,9 +19,7 @@
             height: 100vh;
             margin: 0;
         }
-        .btn-success{
-            width:250px;
-        }
+
         .full-height {
             margin-top: 300px;
         }
@@ -74,15 +73,15 @@
     </style>
 </head>
 <body>
-<div class="flex-center position-ref ">
-    
-    <div class="top-right links">
-    <a href="/dashboard">Home</a>
-    </div>
+    <div class="flex-center position-ref ">
+        <div class="top-right links">
+            <a href="/dashboard">Home</a>
+        </div>
 
-    <br \><br \>
-    <div class="container mtop">
-        @yield('content')
+        <br \><br \>
+        <div class="container mtop">
+            @yield('content')
+        </div>
     </div>
 </body>
 </html>

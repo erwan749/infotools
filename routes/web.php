@@ -38,10 +38,5 @@ Route::middleware([
     Route::delete('/contenir/delete/{facture_id}/{produit_id}', [ContenirController::class, 'destroy'])->name('contenir.destroy');
     Route::post('/contenir/store', [ContenirController::class, 'store'])->name('contenirs.store');
     Route::get('factures/contenirs/{idFact}/{idProd}', [ContenirController::class, 'edit'])->name('factures.contenirs.edit');
-    Route::put('factures/contenirs/{idFact}/{idProd}', [ContenirController::class, 'update'])->name('contenirs.update');
-
-
-
-
-
 });
+Route::put('factures/contenirs/{idFact}/{idProd}', [ContenirController::class, 'update'])->name('contenirs.update');
