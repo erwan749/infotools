@@ -105,33 +105,36 @@ class ContenirController extends Controller
     /**
  * Update the specified resource in storage.
  */
-    public function update(UpdateContenirRequest $request, $idFact, $idProd)
+    public function update(Request $request, $idFact, $idProd)
     {
-        // Récupérer le contenu à mettre à jour
+        $request->validate([
+            'Qte' => 'required|integer|min:1',
+            'idProd' => 'required|exists:produits,id', // Ensure the product exists
+        ]);
         $contenir = Contenir::where('idFact', $idFact)
                             ->where('idProd', $idProd)
                             ->first();
 
-        // Vérifier si le contenu existe
-        if (!$contenir) {
-            return redirect()->route('factures.show', $idFact)->with('error', 'Produit non trouvé dans cette facture');
-        }
+         if (!$contenir) {
+             return redirect()->back()->with('error', 'Produit non trouvé dans la facture.');
+         }
+    
+         // Delete the record by using the composite keys explicitly
+         Contenir::where('idFact', $idFact)
+                 ->where('idProd', $idProd)
+                 ->delete();                    
 
-        // Validation des nouvelles données
-        $request->validate([
-            'Qte' => 'required|integer|min:1',
-            'idProd' => 'required|exists:produits,id', // Assurer que le produit existe
+        Contenir::create([
+            'idFact' => $idFact,
+            'idProd' => $request->idProd,
+            'Qte' => $request->Qte,
         ]);
 
-        // Mettre à jour la quantité et le produit
-        $contenir->Qte = $request->Qte;
-        $contenir->idProd = $request->idProd;  // Mise à jour du produit
-        $contenir->save();
-
-        // Redirection avec un message de succès
+        // Redirect with a success message
         return redirect()->route('factures.show', $idFact)
                         ->with('success', 'Produit et quantité mis à jour dans la facture.');
     }
+
 
 
     /**
