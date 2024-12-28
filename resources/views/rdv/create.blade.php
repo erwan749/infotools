@@ -28,26 +28,9 @@
 
         <div class="row">
             <div class="form-group col-md-4">
-                <strong>Date du rendez-vous : </strong>
-                <input type="date" class="form-control" name="DateRdv">
+                <strong>Date et heure du rendez-vous : </strong>
+                <input type="datetime-local" class="form-control" name="DateRdv" id="datetime-picker">
                 @error('DateRdv')
-                    <div class="text-danger">{{ $message }}</div>
-                @enderror
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="form-group col-md-4">
-                <strong>Commercial : </strong>
-                <select class="form-control" name="commercial_id">
-                    <option value="">Sélectionnez un commercial</option>
-                    @foreach ($commercials as $commercial)
-                        <option value="{{ $commercial->id }}">
-                            {{ $commercial->user->name }}
-                        </option>
-                    @endforeach
-                </select>
-                @error('commercial_id')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
@@ -77,3 +60,25 @@
         </div>
     </form>
 @endsection
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const occupiedDates = @json($occupiedDates);
+
+        const dateInput = document.querySelector('input[name="DateRdv"]');
+
+        dateInput.addEventListener('input', function () {
+            const selectedDateTime = new Date(this.value);
+            const isOccupied = occupiedDates.some(function (range) {
+                const start = new Date(range.start);
+                const end = new Date(range.end);
+                return selectedDateTime >= start && selectedDateTime < end;
+            });
+
+            if (isOccupied) {
+                alert('Cette plage horaire est déjà occupée.');
+                this.value = ''; // Réinitialise la valeur du champ
+            }
+        });
+    });
+</script>

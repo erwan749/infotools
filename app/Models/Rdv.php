@@ -10,7 +10,7 @@ use App\Models\Commercial;
 class Rdv extends Model
 {
     use HasFactory;
-    protected $table = 'rdv';
+    protected $table = 'rdvs';
 
     public function rdv(){
         return $this->hasMany('App\Rdv');

@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Rdv;
 use App\Models\Client;
 use App\Models\Commercial; 
-use App\Http\Requests\Request;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
 
 class RdvController extends Controller
 {
@@ -39,18 +41,65 @@ class RdvController extends Controller
      * Show the form for creating a new resource.
      */
     public function create()
-    {
-        $clients = Client::all();
-        $commercials = Commercial::all();
-        return view('rdv.create', compact('clients', 'commercials'));
+{
+    // Récupérer le commercial connecté
+    $commercial = Commercial::where('idUser', auth()->id())->first();
+
+    if (!$commercial) {
+        return redirect()->route('rdv.index')->withErrors(['error' => 'Commercial non trouvé.']);
     }
+
+    // Récupérer les rendez-vous du commercial connecté
+    $rdvs = Rdv::where('NoCom', $commercial->id)->get(['DateRdv']);
+
+    return view('rdv.create', [
+        'clients' => Client::all(),
+        'occupiedDates' => $rdvs->map(function ($rdv) {
+            $start = \Carbon\Carbon::parse($rdv->DateRdv);
+            $end = $start->clone()->addMinutes(30);
+            return [
+                'start' => $start->format('Y-m-d\TH:i'),
+                'end' => $end->format('Y-m-d\TH:i'),
+            ];
+        }),
+    ]);
+}
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        //
+        // Validation des données du formulaire
+        $validatedData = $request->validate([
+            'DateRdv' => 'required|date',
+            'client_id' => 'required|exists:clients,id',
+        ], [
+            'DateRdv.required' => 'La date du rendez-vous est obligatoire.',
+            'client_id.required' => 'Veuillez sélectionner un client.',
+            'client_id.exists' => 'Le client sélectionné est invalide.',
+        ]);
+    
+        // Récupérer l'utilisateur connecté
+        $user = Auth::user();
+    
+        // Vérifier si l'utilisateur est associé à un commercial
+        $commercial = $user->commercial;
+        if (!$commercial) {
+            return redirect()->back()->withErrors([
+                'commercial' => 'L’utilisateur connecté n’est pas associé à un commercial.'
+            ])->withInput();
+        }
+    
+        // Créer un nouveau rendez-vous
+        Rdv::create([
+            'DateRdv' => $validatedData['DateRdv'],
+            'NoClient' => $validatedData['client_id'],
+            'NoCom' => $commercial->id, // Associer le commercial connecté
+        ]);
+    
+        // Rediriger avec un message de succès
+        return redirect()->route('rdv.index')->with('success', 'Rendez-vous ajouté avec succès.');
     }
 
     /**

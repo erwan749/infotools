@@ -22,4 +22,5 @@ class Commercial extends Model
     protected $fillable =[
         'cpCom','villeCom','rueCom','telCom','idUser'
     ];
+    
 }
