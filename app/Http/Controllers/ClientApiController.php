@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Client;
 use App\Models\Prospect;
+use Illuminate\Support\Facades\Hash;
 
 class ClientApiController extends Controller
 {
@@ -47,34 +48,71 @@ class ClientApiController extends Controller
      */
     public function store(Request $request)
     {
-    if (!auth()->user()->tokenCan('create')) {
-        abort(401, 'Non autorisé');
-    }
+        if (!auth()->user()->tokenCan('create')) {
+            abort(401, 'Non autorisé');
+        }
+        $idProspect = $request->idProspects ;
+        if(!is_null($idProspect)){
+            $request->validate([
+                'CPClient' => 'required',
+                'VilleClient' => 'required',
+                'AdresseClient' => 'required',
+                'idProspects' => 'required', // Ensure this is validated
+            ]);
+    
+            // Check if the associated prospect exists
+            $existingProspect = Prospect::find($request->idProspects);
+            if (is_null($existingProspect)) {
+                return response()->json([
+                    "success" => false,
+                    "message" => "Le prospect associé n'existe pas."
+                ], 404);
+            }
+    
+            // Create the client, including idProspects
+            $clients = Client::create($request->only(['CPClient', 'VilleClient', 'AdresseClient', 'idProspects']));
+    
+            
+        }
+        else{
+            $request->validate([
+                'CPClient' => 'required',
+                'VilleClient' => 'required',
+                'AdresseClient' => 'required',
+                'NomProspects' => 'required',
+                'PrenomProspects' => 'required',
+                'TelProspects' => 'required',
+                'EmailProspects' => 'required|email', // Validation de l'email
+                'mdpProspect' => 'required'
+            ]);
+            
+            // Hashing du mot de passe
+            $psw = Hash::make($request->mdpProspect);
+            
+            // Création du prospect avec les bonnes colonnes
+            $prospect = Prospect::create([
+                'NomProspects' => $request->NomProspects,
+                'PrenomProspects' => $request->PrenomProspects,
+                'TelProspects' => $request->TelProspects,
+                'EmailProspects' => $request->EmailProspects,
+                'mdpProspect' => $psw, // Mot de passe haché
+            ]);
+    
+            // Création du client avec l'ID du prospect nouvellement créé
+            $clients = Client::create([
+                'CPClient' => $request->CPClient,
+                'VilleClient' => $request->VilleClient,
+                'AdresseClient' => $request->AdresseClient,
+                'idProspects' => $prospect->id, // L'ID du prospect
+            ]);
 
-    $request->validate([
-        'CPClient' => 'required',
-        'VilleClient' => 'required',
-        'AdresseClient' => 'required',
-        'idProspects' => 'required', // Ensure this is validated
-    ]);
-
-    // Check if the associated prospect exists
-    $existingProspect = Prospect::find($request->idProspects);
-    if (is_null($existingProspect)) {
+        }
         return response()->json([
-            "success" => false,
-            "message" => "Le prospect associé n'existe pas."
-        ], 404);
-    }
-
-    // Create the client, including idProspects
-    $clients = Client::create($request->only(['CPClient', 'VilleClient', 'AdresseClient', 'idProspects']));
-
-    return response()->json([
-        "success" => true,
-        "message" => "Client ajouté avec succès.",
-        "data" => $clients
-    ]);
+            "success" => true,
+            "message" => "Client ajouté avec succès.",
+            "data" => $clients
+        ]);
+        
     }
 
     /**
