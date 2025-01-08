@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('rdvs', function (Blueprint $table) {
+        Schema::create('rdv', function (Blueprint $table) {
             $table->id(); // Clé primaire auto-incrémentée
             $table->dateTime('DateRdv'); // Date et heure du rendez-vous
             $table->unsignedBigInteger('NoCom'); // Clé étrangère vers commercials.id
