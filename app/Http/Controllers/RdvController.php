@@ -16,7 +16,21 @@ class RdvController extends Controller
      */
     public function index()
     {
-        $rdv = Rdv::with(['commercial.user', 'client.prospect'])->get();
+        $user = auth()->user(); // Récupère l'utilisateur connecté
+
+    // Vérifie le rôle de l'utilisateur
+        if ($user->role == 'manager') {
+            // Si l'utilisateur est un manager, récupère tous les rendez-vous
+            $rdv = Rdv::with(['commercial.user', 'client.prospect'])->get();
+        } else {
+            // Si l'utilisateur n'est pas un manager, récupère les rendez-vous associés à lui via la table commercial
+            $rdv = Rdv::with(['commercial.user', 'client.prospect'])
+                    ->whereHas('commercial', function($query) use ($user) {
+                        // On filtre sur le commercial en fonction de l'idUser de l'utilisateur connecté
+                        $query->where('idUser', $user->id);
+                    })
+                    ->get();
+        }
         
         // Mapper les données pour inclure les informations du commercial, du client et de l'utilisateur
         $rdvData = $rdv->map(function ($rdv) {

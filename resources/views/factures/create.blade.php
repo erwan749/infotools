@@ -12,6 +12,19 @@
         </div>
     </div>
 
+    <!-- Affichage des messages d'erreur ou de succès -->
+    @if (session('error'))
+        <div class="alert alert-danger">
+            <strong>Erreur :</strong> {{ session('error') }}
+        </div>
+    @endif
+
+    @if (session('success'))
+        <div class="alert alert-success">
+            <strong>Succès :</strong> {{ session('success') }}
+        </div>
+    @endif
+
     <form method="post" action="{{ route('factures.store') }}">
         @csrf
 
@@ -43,9 +56,9 @@
                     <option value="">Sélectionner un client</option>
                     @foreach ($clients as $client)
                     <option value="{{ $client->id }}">
-    {{ $client->prospect ? $client->prospect->NomProspects : 'Nom inconnu' }} 
-    {{ $client->prospect ? $client->prospect->PrenomProspects : 'Prénom inconnu' }}
-</option>
+                        {{ $client->prospect ? $client->prospect->NomProspects : 'Nom inconnu' }} 
+                        {{ $client->prospect ? $client->prospect->PrenomProspects : 'Prénom inconnu' }}
+                    </option>
                     @endforeach
                 </select>
                 @error('idClient')

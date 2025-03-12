@@ -48,15 +48,6 @@ class ContenirController extends Controller
                             ->where('idProd', $request->idProd)
                             ->first();
 
-        if ($contenir) {
-            // Update the quantity instead of creating a new record
-            $contenir->Qte += $request->Qte;
-            $contenir->save();
-
-            return redirect()->route('factures.show', $request->idFact)
-                            ->with('success', 'Quantité mise à jour pour ce produit.');
-        } else {
-            // Create a new record
             Contenir::create([
                 'idFact' => $request->idFact,
                 'idProd' => $request->idProd,
@@ -65,7 +56,6 @@ class ContenirController extends Controller
 
             return redirect()->route('factures.show', $request->idFact)
                             ->with('success', 'Produit ajouté à la facture.');
-        }
     }
 
         
