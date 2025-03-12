@@ -6,6 +6,7 @@ use App\Http\Controllers\ClientController;
 use App\Http\Controllers\FactureController;
 use App\Http\Controllers\ContenirController;
 use App\Http\Controllers\RdvController;
+use App\Http\Controllers\CommercialController;
 
 
 
@@ -34,6 +35,7 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
     Route::resource('clients',ClientController::class);
+    Route::resource('commercial',CommercialController::class);
     Route::resource('rdv',RdvController::class);
     Route::resource('produits',ProduitController::class);
     Route::resource('factures',FactureController::class);
@@ -42,5 +44,6 @@ Route::middleware([
     Route::post('/contenir/store', [ContenirController::class, 'store'])->name('contenirs.store');
     Route::get('factures/contenirs/{idFact}/{idProd}', [ContenirController::class, 'edit'])->name('factures.contenirs.edit');
     Route::put('factures/contenirs/{idFact}/{idProd}', [ContenirController::class, 'update'])->name('contenirs.update');
+    Route::get('commercial/{id}', [CommercialController::class, 'show'])->name('commercial.show');
 });
 Route::put('factures/contenirs/{idFact}/{idProd}', [ContenirController::class, 'update'])->name('contenirs.update');

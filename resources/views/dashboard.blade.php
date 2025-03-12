@@ -44,7 +44,9 @@
                     <a class="a_nav" href="/rdv">Rendez vous</a>
                     <a class="a_nav" href="/produits">Produits</a>
                     <a class="a_nav" href="/factures">factures</a>
-                    
+                    @if(auth()->user()->role == 'manager')
+                        <a class="a_nav" href="/commercial">Commercial</a>
+                    @endif
                 </div>
             </div>
         </div>
