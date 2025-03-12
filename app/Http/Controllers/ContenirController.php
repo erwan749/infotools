@@ -72,6 +72,11 @@ class ContenirController extends Controller
      */
     public function edit($idFact, $idProd)
     {
+        $user = auth()->user();
+        if ($user->role != 'manager') {
+            return redirect()->route('factures.show', ['facture' => $idFact])
+                             ->with('error', 'Vous n\'avez pas les droits pour modifier cette facture');
+        }
         // Récupérer le contenu de la facture avec le produit et la quantité
         $contenir = Contenir::where('idFact', $idFact)
                             ->where('idProd', $idProd)
@@ -132,22 +137,24 @@ class ContenirController extends Controller
      */
     public function destroy($facture_id, $produit_id)
     {
-        // Find the record using idFact and idProd
+        $user = auth()->user();
+    
+        if ($user->role != 'manager') {
+            return redirect()->route('factures.show', ['facture' => $facture_id])
+                             ->with('error', 'Vous n\'avez pas les droits pour modifier cette facture');
+        }
         $contenir = Contenir::where('idFact', $facture_id)
                             ->where('idProd', $produit_id)
                             ->first();
     
-        // If the record does not exist, redirect with an error
         if (!$contenir) {
             return redirect()->back()->with('error', 'Produit non trouvé dans la facture.');
         }
     
-        // Delete the record by using the composite keys explicitly
         Contenir::where('idFact', $facture_id)
                 ->where('idProd', $produit_id)
                 ->delete();
     
-        // Redirect with a success message
         return redirect()->route('factures.show', $facture_id)
                          ->with('success', 'Produit supprimé de la facture.');
     }

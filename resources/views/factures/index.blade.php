@@ -14,6 +14,11 @@
             <p>{{ $message }}</p>
         </div>
     @endif
+    @if ($message = Session::get('error'))
+        <div class="alert alert-danger">
+            <p>{{ $message }}</p>
+        </div>
+    @endif
 
     <table class="table table-bordered">
         <thead>
@@ -48,7 +53,10 @@
 
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger">Supprimer</button>
+                            @if(auth()->user()->role == 'manager')
+                                <button type="submit" class="btn btn-danger">Supprimer</button>
+                            @endif
+
                         </form>
                     </td>
                 </tr>

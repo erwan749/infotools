@@ -69,7 +69,11 @@
                 </div>
             </div>
         </div>
-
+        @if ($message = Session::get('error'))
+        <div class="alert alert-danger">
+            <p>{{ $message }}</p>
+        </div>
+    @endif
         <!-- Products Information -->
         <div class="row">
             <div class="col-md-12">
@@ -112,12 +116,15 @@
                                     <td>
                                         <form method="POST" action="{{ route('contenir.destroy', ['facture_id' => $facture->id, 'produit_id' => $contenir->produit->id]) }}" style="display: inline;">
                                             <a class="btn btn-info" href="{{ route('produits.show',  $contenir->idProd) }}">Détails</a>
+                                            @if(auth()->user()->role == 'manager')
                                             <a class="btn btn-primary" href="{{ route('factures.contenirs.edit', ['idFact' => $contenir->idFact, 'idProd' => $contenir->idProd]) }}">Editer</a>
+                                            
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce produit ?')">
                                                 Supprimer
                                             </button>
+                                            @endif
                                         </form>
                                     </td>
                                 </tr>

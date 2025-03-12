@@ -103,6 +103,12 @@ class FactureController extends Controller
      */
     public function destroy(Facture $facture)
     {
+        $user = auth()->user();
+        if($user->role !='manager'){
+            return redirect()->route('factures.index')
+                ->with('error', 'Vous n\'avez pas les droits pour supprimer une facture');
+        }
+
         if ($facture->contenirs->isNotEmpty()) {
             return redirect()->route('factures.index')
                 ->with('success', 'Impossible de supprimer, la facture est lié à du contenue');
