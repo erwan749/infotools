@@ -21,7 +21,7 @@
             <th>ID</th>
             <th>Nom prenom</th>
             <th>email</th>
-            <th width="255px">Actions <div class="pull-right"><a class="btn btn-success" href="{{ route('clients.create') }}"><i class='fa fa-plus-circle'></i> Ajouter un client</a></div></th>
+            <th width="255px">Actions <div class="pull-right"><a class="btn btn-success" href="{{ route('commercial.create') }}"><i class='fa fa-plus-circle'></i> Ajouter un commercial</a></div></th>
         </tr>
         @foreach($users as $user)
             <tr>

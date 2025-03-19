@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('cpCom', 5); // Code postal
             $table->string('villeCom', 50); // Ville
             $table->string('rueCom', 50); // Rue
-            $table->string('role',50);
             $table->string('telCom', 50); // Téléphone
             $table->unsignedBigInteger('idUser'); // Clé étrangère vers users.id
             $table->timestamps(); // Colonnes created_at et updated_at
