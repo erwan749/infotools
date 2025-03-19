@@ -19,7 +19,7 @@ class ProspectFactory extends Factory
         return [
             'NomProspects' =>$this->faker->lastname(),
             'PrenomProspects' => $this->faker->firstname(),
-            'telProspects'=>$this->faker->(),
+            'telProspects'=>$this->faker->phoneNumber(),
             'EmailProspects'=>$this->faker->unique()->safeEmail(),
             'mdpProspect'=>bcrypt($this->faker->password()),
         ];
