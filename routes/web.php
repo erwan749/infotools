@@ -45,5 +45,7 @@ Route::middleware([
     Route::get('factures/contenirs/{idFact}/{idProd}', [ContenirController::class, 'edit'])->name('factures.contenirs.edit');
     Route::put('factures/contenirs/{idFact}/{idProd}', [ContenirController::class, 'update'])->name('contenirs.update');
     Route::get('commercial/{id}', [CommercialController::class, 'show'])->name('commercial.show');
+    
 });
+
 Route::put('factures/contenirs/{idFact}/{idProd}', [ContenirController::class, 'update'])->name('contenirs.update');
