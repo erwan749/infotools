@@ -115,6 +115,11 @@ class ClientController extends Controller
      */
     public function edit(Client $client)
     {
+        $user = auth()->user();
+        if($user->role !='manager'){
+            return redirect()->route('clients.index')
+                ->with('error', 'Vous n\'avez pas les droits pour modifier ce client');
+        }
         return view('clients.edit',compact('client'));//renvoye sur la page edit de client avec les donner d'un client selectionner 
     }
 
@@ -126,54 +131,59 @@ class ClientController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Client $client)
-{
-    /**
-     * Gestion des erreurs de saisie
-     */
-    $customMessages = [
-        'Nom.required' => 'Vous devez entrer un nom.',
-        'Prenom.required' => 'Vous devez entrer un prénom.',
-        'Adresse.required' => 'Vous devez entrer une adresse.',
-        'CP.required' => 'Vous devez entrer un code postal.',
-        'Ville.required' => 'Vous devez entrer une ville.',
-        'Email.required' => 'Vous devez entrer un email.',
-        'Telephone.required' => 'Vous devez entrer un numéro de téléphone.',
-        'CP.digits' => 'Le code postal doit avoir 5 chiffres.',
-        'Telephone.digits' => 'Le numéro de téléphone doit avoir 10 chiffres.',
-        'Email.email' => 'Le format email n\'est pas respecté.',
-        'Email.unique' => 'Cet email existe déjà.',
-        'Telephone.unique' => 'Ce numéro de téléphone existe déjà.',
-    ];
+    {
+        $user = auth()->user();
+            if($user->role !='manager'){
+                return redirect()->route('clients.index')
+                    ->with('error', 'Vous n\'avez pas les droits pour modifier ce client');
+            }
+        /**
+         * Gestion des erreurs de saisie
+         */
+        $customMessages = [
+            'Nom.required' => 'Vous devez entrer un nom.',
+            'Prenom.required' => 'Vous devez entrer un prénom.',
+            'Adresse.required' => 'Vous devez entrer une adresse.',
+            'CP.required' => 'Vous devez entrer un code postal.',
+            'Ville.required' => 'Vous devez entrer une ville.',
+            'Email.required' => 'Vous devez entrer un email.',
+            'Telephone.required' => 'Vous devez entrer un numéro de téléphone.',
+            'CP.digits' => 'Le code postal doit avoir 5 chiffres.',
+            'Telephone.digits' => 'Le numéro de téléphone doit avoir 10 chiffres.',
+            'Email.email' => 'Le format email n\'est pas respecté.',
+            'Email.unique' => 'Cet email existe déjà.',
+            'Telephone.unique' => 'Ce numéro de téléphone existe déjà.',
+        ];
 
-    // Validation des données envoyées
-    $request->validate([
-        'Nom' => 'required|string|max:255',
-        'Prenom' => 'required|string|max:255',
-        'Adresse' => 'required|string|max:255',
-        'CP' => 'required|string|digits:5',
-        'Ville' => 'required|string|max:255',
-        'Email' => 'required|email|max:255|unique:prospects,EmailProspects,' . $client->prospect->id, // Ignore existing prospect email
-        'Telephone' => 'required|string|digits:10|unique:prospects,telProspects,' . $client->prospect->id, // Ignore existing prospect phone
-    ], $customMessages);
+        // Validation des données envoyées
+        $request->validate([
+            'Nom' => 'required|string|max:255',
+            'Prenom' => 'required|string|max:255',
+            'Adresse' => 'required|string|max:255',
+            'CP' => 'required|string|digits:5',
+            'Ville' => 'required|string|max:255',
+            'Email' => 'required|email|max:255|unique:prospects,EmailProspects,' . $client->prospect->id, // Ignore existing prospect email
+            'Telephone' => 'required|string|digits:10|unique:prospects,telProspects,' . $client->prospect->id, // Ignore existing prospect phone
+        ], $customMessages);
 
-    // Mise à jour du prospect associé
-    $client->prospect->update([
-        'NomProspects' => $request->Nom,
-        'PrenomProspects' => $request->Prenom,
-        'EmailProspects' => $request->Email,
-        'telProspects' => $request->Telephone,
-    ]);
+        // Mise à jour du prospect associé
+        $client->prospect->update([
+            'NomProspects' => $request->Nom,
+            'PrenomProspects' => $request->Prenom,
+            'EmailProspects' => $request->Email,
+            'telProspects' => $request->Telephone,
+        ]);
 
-    // Mise à jour du client
-    $client->update([
-        'CPClient' => $request->CP,
-        'VilleClient' => $request->Ville,
-        'AdresseClient' => $request->Adresse,
-    ]);
+        // Mise à jour du client
+        $client->update([
+            'CPClient' => $request->CP,
+            'VilleClient' => $request->Ville,
+            'AdresseClient' => $request->Adresse,
+        ]);
 
-    return redirect()->route('clients.index')
-        ->with('success', 'Client mis à jour avec succès');
-}
+        return redirect()->route('clients.index')
+            ->with('success', 'Client mis à jour avec succès');
+    }
 
 
 
@@ -184,19 +194,24 @@ class ClientController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy(Client $client)
-{
-    // Vérifier si le client a des factures associées
-    if ($client->factures->isNotEmpty()) {
+    {
+        $user = auth()->user();
+        if($user->role !='manager'){
+            return redirect()->route('clients.index')
+                ->with('error', 'Vous n\'avez pas les droits pour supprimer ce client');
+        }
+        // Vérifier si le client a des factures associées
+        if ($client->factures->isNotEmpty()) {
+            return redirect()->route('clients.index')
+                ->with('success', 'Impossible de supprimer, client lié à une ou plusieurs factures');
+        }
+
+        // Supprimer le client
+        $client->delete();
+
+        // Rediriger avec un message de succès après la suppression
         return redirect()->route('clients.index')
-            ->with('success', 'Impossible de supprimer, client lié à une ou plusieurs factures');
+            ->with('success', 'Client supprimé avec succès');
     }
-
-    // Supprimer le client
-    $client->delete();
-
-    // Rediriger avec un message de succès après la suppression
-    return redirect()->route('clients.index')
-        ->with('success', 'Client supprimé avec succès');
-}
 
 }

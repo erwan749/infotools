@@ -41,11 +41,16 @@
                 <td>
                     <form action="{{ route('clients.destroy',$client->id) }}" method="POST">
                         <a class="btn btn-info" href="{{ route('clients.show',$client->id) }}">Détails</a>
+                        @if(auth()->user()->role == 'manager')
+
                         <a class="btn btn-primary" href="{{ route('clients.edit',$client->id) }}">Editer</a>
+                        @endif 
 
                         @csrf
                         @method('DELETE')
+                        @if(auth()->user()->role == 'manager')
                         <button type="submit" class="btn btn-danger">Supprimer</button>
+                        @endif 
                     </form>
                 </td>
             </tr>
