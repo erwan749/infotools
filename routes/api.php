@@ -25,6 +25,8 @@ use App\Http\Controllers\CommercialApiController;
 |
 */
 
+Route::post('login', [CommercialApiController::class, 'login'])->name('commerciaux.login');
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
@@ -39,4 +41,3 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('rdvs', RdvApiController::class);
     Route::apiResource('commerciaux', CommercialApiController::class);
 });
-Route::post('login', [CommercialApiController::class, 'login'])->name('commerciaux.login');
