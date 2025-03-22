@@ -37,11 +37,18 @@
             <td>
             <form action="{{ route('produits.destroy',$produit->id) }}" method="POST">
                         <a class="btn btn-info" href="{{ route('produits.show',$produit->id) }}">Détails</a>
+                        @if(auth()->user()->role == 'manager')
+
                         <a class="btn btn-primary" href="{{ route('produits.edit',$produit->id) }}">Editer</a>
+                        @endif 
 
                         @csrf
                         @method('DELETE')
+                        @if(auth()->user()->role == 'manager')
+
                         <button type="submit" class="btn btn-danger">Supprimer</button>
+                        @endif 
+
             </form>
             </td>
         </tr>

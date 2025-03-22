@@ -79,6 +79,11 @@ class ProduitController extends Controller
      */
     public function edit(Produit $produit)
     {
+        $user = auth()->user();
+        if($user->role !='manager'){
+            return redirect()->route('clients.index')
+                ->with('error', 'Vous n\'avez pas les droits pour modifier ce produit');
+        }
         return view('produits.edit', compact('produit'));
     }
 
@@ -123,6 +128,12 @@ class ProduitController extends Controller
      */
     public function destroy(Produit $produit)
     {
+        $user = auth()->user();
+        if($user->role !='manager'){
+            return redirect()->route('clients.index')
+                ->with('error', 'Vous n\'avez pas les droits pour supprimer ce produit');
+        }
+
         $produit->delete();
         return redirect()->route('produits.index')
             ->with('success', 'Produit supprimé avec succès.');
