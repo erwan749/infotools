@@ -45,7 +45,7 @@
 
                         <a class="btn btn-primary" href="{{ route('clients.edit',$client->id) }}">Editer</a>
                         @endif 
-
+    
                         @csrf
                         @method('DELETE')
                         @if(auth()->user()->role == 'manager')
