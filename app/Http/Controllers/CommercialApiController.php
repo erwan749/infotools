@@ -88,6 +88,7 @@ class CommercialApiController extends Controller
         return response()->json([
             "success" => true,
             "data" => [
+                "id" => $user->id,
                 "name" => $user->name,
                 "token" => $token
             ]
