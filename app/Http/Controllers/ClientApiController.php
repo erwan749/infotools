@@ -93,7 +93,7 @@ class ClientApiController extends Controller
             $prospect = Prospect::create([
                 'NomProspects' => $request->NomProspects,
                 'PrenomProspects' => $request->PrenomProspects,
-                'TelProspects' => $request->TelProspects,
+                'telProspects' => $request->TelProspects,
                 'EmailProspects' => $request->EmailProspects,
                 'mdpProspect' => $psw, // Mot de passe haché
             ]);
