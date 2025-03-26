@@ -62,6 +62,7 @@ class ClientApiController extends Controller
     
             // Check if the associated prospect exists
             $existingProspect = Prospect::find($request->idProspects);
+            $prospect = $existingProspect;
             if (is_null($existingProspect)) {
                 return response()->json([
                     "success" => false,
@@ -107,10 +108,14 @@ class ClientApiController extends Controller
             ]);
 
         }
+        $dataCli = [
+            'clients' => $clients,
+            'prospects' => $prospect,
+        ];
         return response()->json([
             "success" => true,
             "message" => "Client ajouté avec succès.",
-            "data" => $clients
+            "data" => $dataCli
         ]);
         
     }
