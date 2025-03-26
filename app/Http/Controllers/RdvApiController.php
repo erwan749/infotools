@@ -17,34 +17,50 @@ class RdvApiController extends Controller
      */
     public function index()
     {
+        // Vérification que l'utilisateur a la permission 'read' sur son token
         if (!auth()->user()->tokenCan('read')) {
             abort(401, 'Non autorisé');
         }
-    
-        // Récupérer tous les rendez-vous et charger les relations 'commercial.user' et 'client.prospect'
-        $rdv = Rdv::with(['commercial.user', 'client.prospect'])->get();
-    
+
+        // Récupère l'utilisateur connecté
+        $user = auth()->user();
+
+        // Vérifie le rôle de l'utilisateur
+        if ($user->role == 'manager') {
+            // Si l'utilisateur est un manager, récupère tous les rendez-vous
+            $rdv = Rdv::with(['commercial.user', 'client.prospect'])->get();
+        } else {
+            // Si l'utilisateur n'est pas un manager, récupère les rendez-vous associés à lui via la table 'commercial'
+            $rdv = Rdv::with(['commercial.user', 'client.prospect'])
+                    ->whereHas('commercial', function ($query) use ($user) {
+                        $query->where('idUser', $user->id);
+                    })
+                    ->get();
+        }
+
         // Mapper les données pour inclure les informations du commercial, du client et de l'utilisateur
         $rdvData = $rdv->map(function ($rdv) {
             return [
-                'id' => $rdv->id, 
-                'date' => $rdv->DateRdv, 
+                'id' => $rdv->id,
+                'date' => $rdv->DateRdv,
                 'commercial' => [
                     'name' => $rdv->commercial && $rdv->commercial->user ? $rdv->commercial->user->name : 'Nom indisponible',
                 ],
                 'client' => [
-                    'nom' => $rdv->client && $rdv->client->prospect ? $rdv->client->prospect->NomProspects : 'Nom indisponible', 
-                    'prenom' => $rdv->client && $rdv->client->prospect ? $rdv->client->prospect->PrenomProspects : 'Prénom indisponible', 
+                    'nom' => $rdv->client && $rdv->client->prospect ? $rdv->client->prospect->NomProspects : 'Nom indisponible',
+                    'prenom' => $rdv->client && $rdv->client->prospect ? $rdv->client->prospect->PrenomProspects : 'Prénom indisponible',
                 ],
             ];
         });
-    
+
+        // Retourner la réponse API avec un message de succès et les données des rendez-vous
         return response()->json([
-            "succes" => true,
-            "message" => "Liste des rendez-vous",
-            "data" => $rdvData,
+            'succes' => true,
+            'message' => 'Liste des rendez-vous',
+            'data' => $rdvData,
         ]);
     }
+
     
 
 
