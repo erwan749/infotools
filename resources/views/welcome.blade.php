@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Infotools Centre</title>
+    <title>Infotools</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/css/bootstrap.css">
     <style>
         body, html {
@@ -51,6 +51,7 @@
     <div class="container-fluid full-height center-content">
         <div class="card">
             <h1>Infotools</h1>
+            <img src="{{ asset('images/logo.png') }}" alt="Mon Logo">
             <p class="company-description">Infotools est une entreprise spécialisée dans la vente et le développement de solutions logicielles.</p>
             <a href="/login" class="btn btn-primary btn-custom">Connexion</a>
         </div>
