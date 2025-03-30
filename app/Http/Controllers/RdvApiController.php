@@ -73,24 +73,39 @@ class RdvApiController extends Controller
         if (!auth()->user()->tokenCan('create')) {
             abort(401, 'Non autorisé');
         }
-    
+        
+        $user = auth()->user();
+        
+        // Vérifie si l'utilisateur a bien un commercial associé
+        if (!$user->commercial) {
+            return response()->json([
+                "success" => false,
+                "message" => "Aucun commercial trouvé pour cet utilisateur."
+            ], 404);
+        }
+        
+        $NoCom = $user->commercial->id;
+        
         // Validation des données entrantes
         $request->validate([
-            'DateRdv' => 'required|date',  // Validation d'un code postal (5 caractères)
-            'NoCom' => 'required|integer|exists:commercials,id', // Validation du nom de la ville (chaîne de 2 à 100 caractères)
-            'NoClient' => 'required|integer|exists:clients,id', // Validation de l'adresse (chaîne de caractères, max 255 caractères)
+            'DateRdv' => 'required|date',
+            'NoClient' => 'required|integer|exists:clients,id',
         ]);
         
-    
-        // Création du produit
-        $rdvs = Rdv::create($request->only(['DateRdv', 'NoCom', 'NoClient']));
-    
+        // Création du rendez-vous 
+        $rdv = Rdv::create([
+            'DateRdv' => $request->DateRdv,
+            'NoCom' => $NoCom,  
+            'NoClient' => $request->NoClient
+        ]);
+        
         // Retourner une réponse JSON avec le code HTTP 201 (création réussie)
         return response()->json([
             "success" => true,
-            "message" => "Produit ajouté avec succès.",
-            "data" => $rdvs
-        ], 201); // Le code 201 indique que la ressource a été créée
+            "message" => "Rendez-vous ajouté avec succès.",
+            "data" => $rdv
+        ], 201);
+        
     }
     
     /**
@@ -102,7 +117,6 @@ class RdvApiController extends Controller
             abort(401,'non autorisé');
         }
         $rdv = Rdv::with(['commercial.user', 'client.prospect'])->find($id);
-
         if(is_null($rdv)){
             return response()->json([
                 "success" => false,
@@ -129,26 +143,31 @@ class RdvApiController extends Controller
     public function update(Request $request, string $id)
     {
         // Trouver le client par ID
-        $rdv = Produit::find($id);
-
+        $rdv = Rdv::find($id);
+        $request->validate([
+            'DateRdv' => 'required|date',
+            'NoClient' => 'required|integer|exists:clients,id',
+        ]);
+        $user = auth()->user();
+        $NoCom = $user->commercial->id;
         // Vérifier si le client existe
         if (is_null($rdv)) {
             return response()->json([
                 "success" => false,
-                "message" => "facture non trouvé."
+                "message" => "rdv non trouvé."
             ], 404);
         }
 
         // Mettre à jour les données
-        $rdv->DateRdv = $request->DateRdv ?? $produits->DateRdv;;
-        $rdv->NoCom = $request->NoCom ?? $produits->NoCom;;
-        $rdv->NoClient = $request->NoClient ?? $produits->NoClient; // Gérer les champs optionnels
+        $rdv->DateRdv = $request->DateRdv;
+        $rdv->NoCom = $NoCom;
+        $rdv->NoClient = $request->NoClient; // Gérer les champs optionnels
         $rdv->save();
 
         // Retourner la réponse
         return response()->json([
             "success" => true,
-            "message" => "facture mis à jour avec succès.",
+            "message" => "rdv mis à jour avec succès.",
             "data" => $rdv
         ]);
 
