@@ -110,7 +110,7 @@ class ProduitApiController extends Controller
         // Retourner la réponse
         return response()->json([
             "success" => true,
-            "message" => "facture mis à jour avec succès.",
+            "message" => "Produits mis à jour avec succès.",
             "data" => $produits
         ]);
 
