@@ -18,11 +18,6 @@
             margin-left: 0;
             padding-left: 0;
         }
-
-        .container, .container-fluid {
-            padding-left: 100px;
-            margin-left: 0;
-        }
         html, body {
             background-color: #fff;
             color: #636b6f;
