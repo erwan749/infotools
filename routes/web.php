@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProduitController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\ProspectController;
 use App\Http\Controllers\FactureController;
 use App\Http\Controllers\ContenirController;
 use App\Http\Controllers\RdvController;
@@ -36,6 +37,7 @@ Route::middleware([
     })->name('dashboard');
     Route::resource('clients',ClientController::class);
     Route::resource('commercial',CommercialController::class);
+    Route::resource('prospects',ProspectController::class);
     Route::resource('rdv',RdvController::class);
     Route::resource('produits',ProduitController::class);
     Route::resource('factures',FactureController::class);

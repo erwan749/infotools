@@ -81,7 +81,7 @@ class ProduitController extends Controller
     {
         $user = auth()->user();
         if($user->role !='manager'){
-            return redirect()->route('clients.index')
+            return redirect()->route('produits.index')
                 ->with('error', 'Vous n\'avez pas les droits pour modifier ce produit');
         }
         return view('produits.edit', compact('produit'));
@@ -130,7 +130,7 @@ class ProduitController extends Controller
     {
         $user = auth()->user();
         if($user->role !='manager'){
-            return redirect()->route('clients.index')
+            return redirect()->route('produits.index')
                 ->with('error', 'Vous n\'avez pas les droits pour supprimer ce produit');
         }
 
