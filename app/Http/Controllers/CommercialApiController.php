@@ -89,6 +89,7 @@ class CommercialApiController extends Controller
             "success" => true,
             "data" => [
                 "idUser" => $user->id,
+                "role" => $user->role,
                 "name" => $user->name,
                 "token" => $token
             ]

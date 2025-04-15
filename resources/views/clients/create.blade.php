@@ -1,115 +1,81 @@
 @extends('clients.layout')
+
 @section('content')
-    <div class="row">
-        <div class="col-lg-12 margin-tb">
-            <div class="pull-left">
-                <h2>Ajout d'un client</h2>
-            </div>
-            <div class="pull-right">
-                <a class="btn btn-primary" href="{{ route('clients.index') }}"><i class='fa fa-plus-circle'></i> Retour</a>
-            </div>
-        </div>
+    <div class="form-header">
+        <h2>Ajouter un nouveau client</h2>
+        <a class="btn btn-primary" href="{{ route('clients.index') }}">
+            <i class="fas fa-arrow-left"></i> Retour à la liste
+        </a>
     </div>
 
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <strong>Oops !</strong> Il y a des erreurs dans le formulaire :
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
-      <form method="post" action="{{url('clients')}}" enctype="multipart/form-data">
-@csrf
-          @if ($errors->any())
-              <div class="alert alert-danger">
-                  <strong>Oops!</strong> Il y a des soucis dans votre formulaire.<br><br>
-                  <ul>
-                      @foreach ($errors->all() as $error)
-                          <li>{{ $error }}</li>
-                      @endforeach
-                  </ul>
-              </div>
-          @endif
+    <form method="POST" action="{{ url('clients') }}" enctype="multipart/form-data" class="client-form">
+        @csrf
 
-          <div class="row">
-  <div class="form-group col-md-4">
-      <strong>Nom : </strong>
-      <input type="text" class="form-control" name="Nom">
-      @error('Nom')
-          <div class="text-danger">{{ $message }}</div>
-      @enderror
-  </div>
-</div>
+        <div class="form-grid">
+            <div class="form-group">
+                <label for="Nom">Nom</label>
+                <input type="text" name="Nom" class="form-control" placeholder="Dupont">
+                @error('Nom') <span class="error">{{ $message }}</span> @enderror
+            </div>
 
-<div class="row">
-  <div class="form-group col-md-4">
-      <strong>Prenom : </strong>
-      <input type="text" class="form-control" name="Prenom">
-      @error('Prenom')
-          <div class="text-danger">{{ $message }}</div>
-      @enderror
-  </div>
-</div>
+            <div class="form-group">
+                <label for="Prenom">Prénom</label>
+                <input type="text" name="Prenom" class="form-control" placeholder="Jean">
+                @error('Prenom') <span class="error">{{ $message }}</span> @enderror
+            </div>
 
-<div class="row">
-  <div class="form-group col-md-4">
-      <strong>Ville : </strong>
-      <input type="text" class="form-control" name="Ville">
-      @error('Ville')
-          <div class="text-danger">{{ $message }}</div>
-      @enderror
-  </div>
-</div>
+            <div class="form-group">
+                <label for="Ville">Ville</label>
+                <input type="text" name="Ville" class="form-control" placeholder="Paris">
+                @error('Ville') <span class="error">{{ $message }}</span> @enderror
+            </div>
 
-<div class="row">
-  <div class="form-group col-md-4">
-      <strong>Adresse : </strong>
-      <input type="text" class="form-control" name="Adresse">
-      @error('Adresse')
-          <div class="text-danger">{{ $message }}</div>
-      @enderror
-  </div>
-</div>
+            <div class="form-group">
+                <label for="Adresse">Adresse</label>
+                <input type="text" name="Adresse" class="form-control" placeholder="12 rue de la paix">
+                @error('Adresse') <span class="error">{{ $message }}</span> @enderror
+            </div>
 
-<div class="row">
-  <div class="form-group col-md-4">
-      <strong>Code Postal : </strong>
-      <input type="text" class="form-control" name="CP">
-      @error('CP')
-          <div class="text-danger">{{ $message }}</div>
-      @enderror
-  </div>
-</div>
+            <div class="form-group">
+                <label for="CP">Code Postal</label>
+                <input type="text" name="CP" class="form-control" placeholder="75001">
+                @error('CP') <span class="error">{{ $message }}</span> @enderror
+            </div>
 
-<div class="row">
-  <div class="form-group col-md-4">
-      <strong>Email : </strong>
-      <input type="text" class="form-control" name="Email">
-      @error('Email')
-          <div class="text-danger">{{ $message }}</div>
-      @enderror
-  </div>
-</div>
+            <div class="form-group">
+                <label for="Email">Email</label>
+                <input type="email" name="Email" class="form-control" placeholder="client@example.com">
+                @error('Email') <span class="error">{{ $message }}</span> @enderror
+            </div>
 
-<div class="row">
-  <div class="form-group col-md-4">
-      <strong>Telephone : </strong>
-      <input type="text" class="form-control" name="Telephone">
-      @error('Telephone')
-          <div class="text-danger">{{ $message }}</div>
-      @enderror
-  </div>
-</div>
+            <div class="form-group">
+                <label for="Telephone">Téléphone</label>
+                <input type="text" name="Telephone" class="form-control" placeholder="0601020304">
+                @error('Telephone') <span class="error">{{ $message }}</span> @enderror
+            </div>
 
-<div class="row">
-  <div class="form-group col-md-4">
-      <strong>Mot de Passe : </strong>
-      <input type="password" class="form-control" name="psw">
-      @error('psw')
-          <div class="text-danger">{{ $message }}</div>
-      @enderror
-  </div>
-</div>
+            <div class="form-group">
+                <label for="psw">Mot de passe</label>
+                <input type="password" name="psw" class="form-control" placeholder="••••••••">
+                @error('psw') <span class="error">{{ $message }}</span> @enderror
+            </div>
+        </div>
 
-<div class="row">
-  <div class="form-group col-md-4" style="margin-top:20px">
-      <button type="submit" class="btn btn-success">Ajouter</button>
-  </div>
-</div></form>
-</div>
-
+        <div class="form-submit">
+            <button type="submit" class="btn btn-success">
+                <i class="fas fa-check"></i> Ajouter
+            </button>
+        </div>
+    </form>
 @endsection

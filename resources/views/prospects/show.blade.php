@@ -1,22 +1,11 @@
 @extends('prospects.layout')
 
 @section('content')
-    <div class="row">
-        <div class="col-lg-12 margin-tb">
-            <div class="pull-left">
-                <h2>Détails du prospect</h2>
-            </div>
-            <div class="pull-right">
-                <a class="btn btn-primary" href="{{ route('prospects.index') }}">Retour</a>
-            </div>
-        </div>
-    </div>
-
-    <div class="container">
+    <div class="container mt-4">
         <div class="row">
             <!-- Prospect Information -->
             <div class="col-md-6">
-                <h4>Détails du prospect</h4>
+                <h2>Détails du Prospect</h2>
                 <div class="form-group">
                     <strong>Nom du prospect :</strong>
                     <p>{{ $prospect->NomProspects ?? 'N/A' }}</p>
@@ -35,6 +24,12 @@
                 </div>
             </div>
         </div>
+
+        <!-- Back Button -->
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <a href="{{ route('prospects.index') }}" class="btn btn-primary">Retour à la liste des prospects</a>
+            </div>
+        </div>
     </div>
 @endsection
-

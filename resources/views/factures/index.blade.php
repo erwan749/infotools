@@ -1,12 +1,11 @@
 @extends('factures.layout')
 
 @section('content')
-    <div class="row">
-        <div class="col-lg-12 margin-tb">
-            <div class="pull-left">
-                <h2>Gestion des factures</h2>
-            </div>
-        </div>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Liste des Factures</h2>
+        <a class="btn btn-success" href="{{ route('factures.create') }}">
+            <i class="fas fa-plus-circle"></i> Ajouter une facture
+        </a>
     </div>
 
     @if ($message = Session::get('success'))
@@ -14,25 +13,20 @@
             <p>{{ $message }}</p>
         </div>
     @endif
+
     @if ($message = Session::get('error'))
         <div class="alert alert-danger">
             <p>{{ $message }}</p>
         </div>
     @endif
 
-    <table class="table table-bordered">
+    <table class="table">
         <thead>
             <tr>
                 <th>ID</th>
                 <th>Date de Facture</th>
                 <th>Client</th> <!-- Client affiché avec le prospect -->
-                <th width="255px">
-                    <div class="pull-right">
-                        <a class="btn btn-success" href="{{ route('factures.create') }}">
-                            <i class='fa fa-plus-circle'></i> Ajouter une facture
-                        </a>
-                    </div>
-                </th>    
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -46,18 +40,21 @@
                         @else
                             Aucun prospect
                         @endif
-                    </td> <!-- Afficher le prospect -->
+                    </td>
                     <td>
-                        <form action="{{ route('factures.destroy', $facture->id) }}" method="POST">
-                            <a class="btn btn-info" href="{{ route('factures.show', $facture->id) }}">Détails</a>
+                        <a class="btn btn-info btn-action" href="{{ route('factures.show', $facture->id) }}">
+                            <i class="fas fa-eye"></i> Détails
+                        </a>
 
-                            @csrf
-                            @method('DELETE')
-                            @if(auth()->user()->role == 'manager')
-                                <button type="submit" class="btn btn-danger">Supprimer</button>
-                            @endif
-
-                        </form>
+                        @if(auth()->user()->role == 'manager')
+                            <form action="{{ route('factures.destroy', $facture->id) }}" method="POST" style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-action" onclick="return confirm('Confirmer la suppression ?')">
+                                    <i class="fas fa-trash"></i> Supprimer
+                                </button>
+                            </form>
+                        @endif
                     </td>
                 </tr>
             @endforeach

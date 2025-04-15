@@ -1,18 +1,13 @@
 @extends('factures.layout')
 
 @section('content')
-    <div class="row">
-        <div class="col-lg-12 margin-tb">
-            <div class="pull-left">
-                <h2>Ajout d'une Facture</h2>
-            </div>
-            <div class="pull-right">
-                <a class="btn btn-primary" href="{{ route('factures.index') }}"><i class='fa fa-arrow-left'></i> Retour</a>
-            </div>
-        </div>
+    <div class="form-header">
+        <h2>Ajout d'une Facture</h2>
+        <a class="btn btn-primary" href="{{ route('factures.index') }}">
+            <i class='fa fa-arrow-left'></i> Retour à la liste
+        </a>
     </div>
 
-    <!-- Affichage des messages d'erreur ou de succès -->
     @if (session('error'))
         <div class="alert alert-danger">
             <strong>Erreur :</strong> {{ session('error') }}
@@ -25,33 +20,29 @@
         </div>
     @endif
 
-    <form method="post" action="{{ route('factures.store') }}">
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <strong>Oops !</strong> Il y a des erreurs dans le formulaire :
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    <form method="POST" action="{{ route('factures.store') }}" class="client-form">
         @csrf
 
-        @if ($errors->any())
-            <div class="alert alert-danger">
-                <strong>Oops!</strong> Il y a des soucis dans votre formulaire.<br><br>
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
+        <div class="form-grid">
+            <div class="form-group">
+                <label for="DateFact">Date de la Facture</label>
+                <input type="date" name="DateFact" class="form-control" placeholder="Sélectionnez une date">
+                @error('DateFact') <span class="error">{{ $message }}</span> @enderror
             </div>
-        @endif
 
-        <div class="row">
-            <div class="form-group col-md-4">
-                <strong>Date de la Facture :</strong>
-                <input type="date" class="form-control" name="DateFact">
-                @error('DateFact')
-                    <div class="text-danger">{{ $message }}</div>
-                @enderror
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="form-group col-md-4">
-                <strong>Client :</strong>
+            <div class="form-group">
+                <label for="idClient">Client</label>
                 <select name="idClient" class="form-control">
                     <option value="">Sélectionner un client</option>
                     @foreach ($clients as $client)
@@ -61,16 +52,14 @@
                     </option>
                     @endforeach
                 </select>
-                @error('idClient')
-                    <div class="text-danger">{{ $message }}</div>
-                @enderror
+                @error('idClient') <span class="error">{{ $message }}</span> @enderror
             </div>
         </div>
 
-        <div class="row">
-            <div class="form-group col-md-4" style="margin-top: 20px">
-                <button type="submit" class="btn btn-success">Ajouter la facture</button>
-            </div>
+        <div class="form-submit">
+            <button type="submit" class="btn btn-success">
+                <i class="fas fa-check"></i> Ajouter la facture
+            </button>
         </div>
     </form>
 @endsection

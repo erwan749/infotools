@@ -1,18 +1,11 @@
 @extends('rdv.layout')
 
 @section('content')
-    <div class="row">
-        <div class="col-lg-12 margin-tb">
-            <div class="pull-left">
-                <h2>Détails du Rendez-vous</h2>
-            </div>
-            <div class="pull-right">
-                <a class="btn btn-primary" href="{{ route('rdv.index') }}">Retour</a>
-            </div>
-        </div>
+    <div class="form-header">
+        <h2>Détails du Rendez-vous</h2>
     </div>
 
-    <div class="container">
+    <div class="container mt-4">
         <div class="row">
             <!-- Informations du Rendez-vous -->
             <div class="col-md-6">
@@ -63,10 +56,10 @@
         </div>
 
         <!-- Bouton Retour -->
-        <div class="row">
-            <div class="col-md-12">
-                <a href="{{ route('rdv.index') }}" class="btn btn-primary">Retour à la liste des rendez-vous</a>
-            </div>
+        <div class="form-submit mt-4"style="text-align: left;">
+            <a href="{{ route('rdv.index') }}" class="btn btn-primary" >
+                <i class="fas fa-arrow-left"></i> Retour à la liste des rendez-vous
+            </a>
         </div>
     </div>
 @endsection

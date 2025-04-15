@@ -1,26 +1,11 @@
 @extends('clients.layout')
 
-
 @section('content')
-    <div class="row">
-        <div class="col-lg-12 margin-tb">
-            <div class="pull-left">
-                <h2> Détails du client</h2>
-            </div>
-            <div class="pull-right">
-                <a class="btn btn-primary" href="{{ route('clients.index') }}"> Retour</a>
-            </div>
-        </div>
-    </div>
-
-
-
-@section('content')
-    <div class="container">
+    <div class="container mt-4">
         <div class="row">
             <!-- Client Information -->
             <div class="col-md-6">
-                <h4>Client Details</h4>
+                <h2>Détails du Client</h2>
                 <div class="form-group">
                     <strong>Nom :</strong>
                     <p>{{ $client->prospect->NomProspects ?? 'N/A' }}</p>
@@ -39,23 +24,23 @@
                 </div>
                 <div class="form-group">
                     <strong>Adresse :</strong>
-                    <p>{{ $client->AdresseClient }}</p>
+                    <p>{{ $client->AdresseClient ?? 'N/A' }}</p>
                 </div>
                 <div class="form-group">
                     <strong>Ville :</strong>
-                    <p>{{ $client->VilleClient }}</p>
+                    <p>{{ $client->VilleClient ?? 'N/A' }}</p>
                 </div>
                 <div class="form-group">
                     <strong>Code Postal :</strong>
-                    <p>{{ $client->CPClient }}</p>
+                    <p>{{ $client->CPClient ?? 'N/A' }}</p>
                 </div>
             </div>
         </div>
 
         <!-- Back Button -->
-        <div class="row">
+        <div class="row mt-4">
             <div class="col-md-12">
-                <a href="{{ route('clients.index') }}" class="btn btn-primary">Back to Clients List</a>
+                <a href="{{ route('clients.index') }}" class="btn btn-primary">Retour à la liste des clients</a>
             </div>
         </div>
     </div>

@@ -1,76 +1,120 @@
 <style>
     .container-link {
         display: flex;
-        flex-direction: column;
+        flex-wrap: wrap;
         justify-content: center;
+        gap: 30px;
+        padding: 40px 20px;
+        background-color: #f4f6f8;
+    }
+
+    .card-link {
+        display: flex;
         align-items: center;
-        gap: 10%;
+        gap: 15px;
+        width: 100%;
+        max-width: 400px;
         padding: 20px;
+        background-color: #fff;
+        color: #333;
+        border-radius: 12px;
+        text-decoration: none;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        transition: all 0.2s ease-in-out;
     }
 
-    .a_nav {
-        padding-top: 10px;
-        padding-bottom: 10px;
-        border-radius: 10px;
-        color: white;
+    .card-link:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+        background-color: #e3f2fd;
+    }
+
+    .card-link .icon {
+        color: #1976d2;
+        min-width: 40px;
+    }
+
+    .card-link h3 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 600;
+    }
+
+    .card-link p {
+        margin: 4px 0 0 0;
         font-size: 14px;
-        width: 75%;
-        text-align: center;
-        background-color: #337ab7;
-        border-color: #2e6da4 0.5px solid;
+        color: #666;
     }
 
-    .a_nav:hover {
-        padding-top: 10px;
-        padding-bottom: 10px;
-        border-radius: 10px;
-        color: white;
-        font-size: 14px;
-        text-align: center;
-        background-color: #2e6da4;
-        border-color: #2e6da4 0.5px solid;
-    }
-
-    @media (min-width: 768px) {
-        .container-link {
-            flex-direction: row;  
-            flex-wrap: wrap;  
-            justify-content: center; 
-            gap: 20px;
-        }
-
-        .a_nav {
-            width: 45%; 
+    @media (max-width: 768px) {
+        .card-link {
+            flex-direction: row;
+            align-items: center;
         }
     }
 
-    @media (max-width: 767px) {
-        .container-link {
-             height: 100%;
+    @media (max-width: 480px) {
+        .card-link {
             flex-direction: column;
+            text-align: center;
         }
 
-        .a_nav {
-            width: 75%;
+        .card-link .icon {
+            margin-bottom: 10px;
         }
     }
 </style>
 
+
+
 <x-app-layout>
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-                <div class="container-link">
-                    <a class="a_nav" href="/prospects">Prospects</a>
-                    <a class="a_nav" href="/clients">Clients</a>
-                    <a class="a_nav" href="/rdv">Rendez vous</a>
-                    <a class="a_nav" href="/produits">Produits</a>
-                    <a class="a_nav" href="/factures">Factures</a>
-                    @if(auth()->user()->role == 'manager')
-                        <a class="a_nav" href="/commercial">Commercial</a>
-                    @endif
-                </div>
-            </div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+<div class="container-link">
+    <a class="card-link" href="/prospects">
+        <i class="fas fa-user-plus fa-2x icon"></i>
+        <div>
+            <h3>Gestion des prospects</h3>
+            <p>Ajoutez, suivez vos prospects.</p>
         </div>
-    </div>
+    </a>
+    <a class="card-link" href="/clients">
+        <i class="fas fa-users fa-2x icon"></i>
+        <div>
+            <h3>Gestion des clients</h3>
+            <p>Visualisez et administrez votre base client.</p>
+        </div>
+    </a>
+    <a class="card-link" href="/rdv">
+        <i class="fas fa-calendar-check fa-2x icon"></i>
+        <div>
+            <h3>Gestion des rendez-vous</h3>
+            <p>Organisez et planifiez vos rencontres commerciales.</p>
+        </div>
+    </a>
+    <a class="card-link" href="/produits">
+        <i class="fas fa-boxes fa-2x icon"></i>
+        <div>
+            <h3>Gestion des produits</h3>
+            <p>Ajoutez, modifiez et gérez votre catalogue.</p>
+        </div>
+    </a>
+    <a class="card-link" href="/factures">
+        <i class="fas fa-file-invoice-dollar fa-2x icon"></i>
+        <div>
+            <h3>Gestion des factures</h3>
+            <p>Générez, consultez et suivez vos factures clients.</p>
+        </div>
+    </a>
+    @if(auth()->user()->role == 'manager')
+    <a class="card-link" href="/commercial">
+        <i class="fas fa-user-tie fa-2x icon"></i>
+        <div>
+            <h3>Gestion commerciale</h3>
+            <p>Suivez votre équipe de commerciale.</p>
+        </div>
+    </a>
+    @endif
+</div>
+
 </x-app-layout>
